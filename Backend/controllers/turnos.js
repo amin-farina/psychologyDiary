@@ -14,7 +14,7 @@ export const getTurnoById = async (req, res) => {
 
 export const createTurno = async (req, res) => {
   try {
-    const { ClienteId, fecha } = req.body;
+    const { ClienteId, fecha, statusTurn, hora } = req.body;
     const clienteExistente = await Cliente.findByPk(ClienteId);
     if (!clienteExistente) {
       return res.status(400).json({ error: "Cliente no encontrado" });
@@ -26,6 +26,8 @@ export const createTurno = async (req, res) => {
     const turno = await Turnos.create({
       ClienteId,
       fecha,
+      hora,
+      statusTurn,
       nombreCliente,
       telefonoCliente,
       emailCliente,
@@ -36,11 +38,15 @@ export const createTurno = async (req, res) => {
       clienteId: ClienteId,
       fechaHistorial: fecha,
       nombreCliente: nombreCliente,
+      statusTurn: turno.statusTurn,
+      hora: turno.hora,
     });
     res.status(200).json({ turno });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res.status(500).json({
+      error: "Error interno del servidor,l al intentar crear el turno",
+    });
   }
 };
 

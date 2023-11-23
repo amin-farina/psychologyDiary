@@ -14,6 +14,10 @@ const Turnos = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    hora: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     nombreCliente: {
       type: DataTypes.STRING,
     },
@@ -21,6 +25,9 @@ const Turnos = db.define(
       type: DataTypes.INTEGER,
     },
     emailCliente: {
+      type: DataTypes.STRING,
+    },
+    statusTurn: {
       type: DataTypes.STRING,
     },
   },

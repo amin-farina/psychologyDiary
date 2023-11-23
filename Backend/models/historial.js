@@ -22,6 +22,9 @@ const HistorialTurnos = db.define(
     nombreCliente: {
       type: DataTypes.STRING,
     },
+    statusTurn: {
+      type: DataTypes.STRING,
+    },
   },
   {
     timestamps: false,
