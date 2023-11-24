@@ -14,6 +14,9 @@ const Turnos = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    dia: {
+      type: DataTypes.STRING,
+    },
     hora: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -29,6 +32,10 @@ const Turnos = db.define(
     },
     statusTurn: {
       type: DataTypes.STRING,
+    },
+    disponible: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true, // Por defecto, todos los turnos están disponibles
     },
   },
   {

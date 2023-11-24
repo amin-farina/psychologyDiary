@@ -86,9 +86,44 @@ export async function deleteAppointment(id) {
 export async function postNewAppointment(data) {
     const res = await fetch("http://localhost:3001/api/turnos/create", {
         method: "POST",
-        headers:{
+        headers: {
             'Content-type': 'application/json'
         },
         body: JSON.stringify(data),
     })
+
+    const respuesta = await res.json()
+    return {
+        props: respuesta
+    }
+}
+
+export async function updateAppointment(data) {
+    const res = await fetch("http://localhost:3001/api/turnos/create", {
+        method: "PUT",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    const respuesta = await res.json()
+    return {
+        props: respuesta
+    }
+}
+
+
+
+
+export async function getAllTurnosDisponibles() {
+    const res = await fetch("http://localhost:3001/api/turnoDisponible", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    const resultsAll = (await res.json())?.turnosDisponibles
+    return {
+        props: { resultsAll }
+    }
 }

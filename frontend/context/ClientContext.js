@@ -1,6 +1,10 @@
 "use client";
 
-import { getAllAppointment, getAllClients } from "@/app/api/service";
+import {
+  getAllAppointment,
+  getAllClients,
+  getAllTurnosDisponibles,
+} from "@/app/api/service";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const ClientContext = createContext();
@@ -11,6 +15,8 @@ export function ClientProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [todosTurnos, setTodosTurnos] = useState([]);
   const [newAppointment, setNewAppointment] = useState(false);
+  const [turnosDisponibles, setTurnosDisponibles] = useState([]);
+  const [nuevoTurnoDisponible, setNuevoTurnoDisponible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +47,20 @@ export function ClientProvider({ children }) {
     fetchAppointment();
   }, [newAppointment, loading]);
 
+  useEffect(() => {
+    const fetchTurnosDisponibles = async () => {
+      try {
+        const todosTurnosDisponibles = (await getAllTurnosDisponibles()).props;
+        setTurnosDisponibles(todosTurnosDisponibles);
+      } catch (err) {
+        console.error("Erorr get TURNOS DISPONIBLES: ", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTurnosDisponibles();
+  }, [nuevoTurnoDisponible, loading]);
+
   return (
     <ClientContext.Provider
       value={{
@@ -53,6 +73,9 @@ export function ClientProvider({ children }) {
         newAppointment,
         setLoading,
         loading,
+        turnosDisponibles,
+        nuevoTurnoDisponible,
+        setNuevoTurnoDisponible,
       }}
     >
       {children}

@@ -14,34 +14,53 @@ export const getTurnoById = async (req, res) => {
 
 export const createTurno = async (req, res) => {
   try {
-    const { ClienteId, fecha, statusTurn, hora } = req.body;
-    const clienteExistente = await Cliente.findByPk(ClienteId);
-    if (!clienteExistente) {
-      return res.status(400).json({ error: "Cliente no encontrado" });
-    }
-    const nombreCliente =
-      clienteExistente.name + " " + clienteExistente.lastName;
-    const telefonoCliente = clienteExistente.telefono;
-    const emailCliente = clienteExistente.email;
-    const turno = await Turnos.create({
-      ClienteId,
-      fecha,
-      hora,
-      statusTurn,
-      nombreCliente,
-      telefonoCliente,
-      emailCliente,
+    const { ClienteId, fecha, statusTurn, hora, dia } = req.body;
+
+    const horarioDeseado = hora;
+    const fechaDeseada = fecha;
+    const turnoExistente = await Turnos.findOne({
+      where: {
+        fecha: fechaDeseada,
+        hora: horarioDeseado,
+        disponible: false,
+      },
     });
 
-    await HistorialTurnos.create({
-      turnoId: turno.id,
-      clienteId: ClienteId,
-      fechaHistorial: fecha,
-      nombreCliente: nombreCliente,
-      statusTurn: turno.statusTurn,
-      hora: turno.hora,
-    });
-    res.status(200).json({ turno });
+    if (turnoExistente) {
+      return res.status(400).json({ error: "El turno no esta disponible" });
+    } else {
+      const clienteExistente = await Cliente.findByPk(ClienteId);
+      if (!clienteExistente) {
+        return res.status(400).json({ error: "Cliente no encontrado" });
+      }
+      const nombreCliente =
+        clienteExistente.name + " " + clienteExistente.lastName;
+      const telefonoCliente = clienteExistente.telefono;
+      const emailCliente = clienteExistente.email;
+      const turno = await Turnos.create({
+        ClienteId,
+        fecha,
+        hora,
+        statusTurn,
+        nombreCliente,
+        telefonoCliente,
+        emailCliente,
+        dia,
+        disponible: false,
+      });
+
+      await HistorialTurnos.create({
+        turnoId: turno.id,
+        clienteId: ClienteId,
+        fechaHistorial: fecha,
+        nombreCliente: nombreCliente,
+        statusTurn: turno.statusTurn,
+        hora: turno.hora,
+        dia,
+        disponible: false,
+      });
+      res.status(200).json({ turno });
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json({
