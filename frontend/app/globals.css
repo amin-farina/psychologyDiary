@@ -25,3 +25,20 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+
+.table-style {
+  border-collapse: separate;
+  border-spacing: 10px; /* Ajusta el valor según tus preferencias */
+}
+
+.table-style th,
+.table-style td {
+  padding: 8px; /* Ajusta el valor según tus preferencias */
+}
+
+input,
+label,
+select {
+  border-radius: 20px;
+}

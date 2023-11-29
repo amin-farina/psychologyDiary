@@ -38,7 +38,7 @@ export const createTurno = async (req, res) => {
       const telefonoCliente = clienteExistente.telefono;
       const emailCliente = clienteExistente.email;
       const turno = await Turnos.create({
-        ClienteId,
+        dni: ClienteId,
         fecha,
         hora,
         statusTurn,
@@ -51,7 +51,7 @@ export const createTurno = async (req, res) => {
 
       await HistorialTurnos.create({
         turnoId: turno.id,
-        clienteId: ClienteId,
+        dni: ClienteId,
         fechaHistorial: fecha,
         nombreCliente: nombreCliente,
         statusTurn: turno.statusTurn,
@@ -64,7 +64,8 @@ export const createTurno = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      error: "Error interno del servidor,l al intentar crear el turno",
+      error: "Error interno del servidor,al al intentar crear el turno",
+      type: { err },
     });
   }
 };

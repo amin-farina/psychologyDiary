@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use("/api", apiRoute);
 
-db.sync() //{ force: true }
+db.sync({ force: true }) //{ force: true }
   // .then(() => {
   //   return turnosDB.sync({ force: true });
   // })

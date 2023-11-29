@@ -25,7 +25,7 @@ const Turnos = db.define(
       type: DataTypes.STRING,
     },
     telefonoCliente: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     emailCliente: {
       type: DataTypes.STRING,

@@ -10,6 +10,7 @@ export function NavBar() {
     { name: 'Home', href: '/' },
     { name: 'Obtener Turno', href: '/turno' },
     { name: 'Historial', href: '/historial' },
+    { name: 'Clientes', href: '/clientes' },
 
   ]
 

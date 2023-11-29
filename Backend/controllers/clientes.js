@@ -41,7 +41,7 @@ export const updateCliente = async (req, res) => {
   try {
     const cliente = await Cliente.update(req.body, {
       where: {
-        id: req.params.clienteId,
+        dni: req.params.clienteId,
       },
     });
     res.status(200).json({ cliente });

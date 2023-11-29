@@ -39,6 +39,20 @@ export async function postNewClient(data) {
 
 }
 
+export async function updateClient(id, data) {
+    const res = await fetch(`http://localhost:3001/api/clientes/${id}`, {
+        method: "PUT",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    const respuesta = await res.json()
+    return {
+        props: respuesta
+    }
+}
+
 
 export async function deleteClient(id) {
     const res = await fetch(`http://localhost:3001/api/clientes/${id}`, {
@@ -98,8 +112,8 @@ export async function postNewAppointment(data) {
     }
 }
 
-export async function updateAppointment(data) {
-    const res = await fetch("http://localhost:3001/api/turnos/create", {
+export async function updateAppointment(id, data) {
+    const res = await fetch(`http://localhost:3001/api/turnos/${id}`, {
         method: "PUT",
         headers: {
             'Content-type': 'application/json'

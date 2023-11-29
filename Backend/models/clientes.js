@@ -1,22 +1,31 @@
 import db from "../db.js";
 import { DataTypes } from "sequelize";
 
-const Cliente = db.define("Cliente", {
-  id: {
-    primaryKey: true,
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+const Cliente = db.define(
+  "Cliente",
+  {
+    dni: {
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+    },
+    email: {
+      type: DataTypes.STRING,
+    },
+    telefono: {
+      type: DataTypes.STRING,
+    },
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  lastName: DataTypes.STRING,
-  email: DataTypes.STRING,
-  telefono: DataTypes.INTEGER,
-},
-{
-    timestamps: false
-});
+  {
+    timestamps: false,
+  }
+);
 
 export default Cliente;

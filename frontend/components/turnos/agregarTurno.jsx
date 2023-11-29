@@ -54,7 +54,7 @@ export function FormularioTurno() {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Sí, eliminar",
+            confirmButtonText: "Sí, crear turno",
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
@@ -99,82 +99,89 @@ export function FormularioTurno() {
     };
 
     return (
-        <form onSubmit={handleSubmit2} className="">
-            <label className="block mb-2">
-                Fecha:
-                <input type="date" placeholder="dd-mm-yyyy" name="fecha" value={formData.fecha} onChange={handleChange2} className="border border-gray-300 px-2 py-1 text-black" />
-                {formData.dia &&
-                    <h1 className="text-white">
-                        {formData.dia}
-                        {fechaFormateada && (
-                            <span>
-                                {" " + fechaFormateada}
-                            </span>
-                        )
-                        }
-                    </h1>}
-            </label>
-            <label className="block mb-2">
-                Hora:
-                {agregarOtroHorario ? (
-                    <input
-                        type="text"
-                        name="hora"
-                        value={formData.hora}
-                        onChange={handleChange2}
-                        className="border border-gray-300 px-2 py-1 text-black"
-                    />
-                ) : (
-                    <select
-                        name="hora"
-                        value={formData.hora}
-                        onChange={handleChange2}
-                        className="border border-gray-300 px-2 py-1 text-black"
-                    >
-                        <option value="" disabled defaultValue>Selecciona una hora</option>
-                        {turnoDisp?.length > 0 && (
-                            <>
-                                {turnoDisp.map((hora) => (
-                                    <option value={hora.horario} key={hora.id}>{hora.horario}</option>
-                                ))}
-                            </>
+        <section className="flex justify-center">
+            <form onSubmit={handleSubmit2} className="">
+                <div className="my-4 space-y-2 text-center">
+                    <h1>Fecha:</h1>
+                    <label className="block mb-2">
+                        <input type="date" placeholder="dd-mm-yyyy" name="fecha" value={formData.fecha} onChange={handleChange2} className="border border-gray-300 px-2 py-1 text-black" />
+                        {formData.dia &&
+                            <h1 className="text-white mt-2">
+                                {formData.dia}
+                                {fechaFormateada && (
+                                    <span>
+                                        {" " + fechaFormateada}
+                                    </span>
+                                )
+                                }
+                            </h1>}
+                    </label>
+                </div>
+                <div className="my-4 space-y-2 text-center">
+                    <h1>Hora:</h1>
+                    <label className="block mb-2">
+                        {agregarOtroHorario ? (
+                            <input
+                                type="text"
+                                name="hora"
+                                value={formData.hora}
+                                onChange={handleChange2}
+                                className="border border-gray-300 px-2 py-1 text-black"
+                            />
+                        ) : (
+                            <select
+                                name="hora"
+                                value={formData.hora}
+                                onChange={handleChange2}
+                                className="border border-gray-300 px-2 py-1 text-black"
+                            >
+                                <option value="" disabled defaultValue>Selecciona una hora</option>
+                                {turnoDisp?.length > 0 && (
+                                    <>
+                                        {turnoDisp.map((hora) => (
+                                            <option value={hora.horario} key={hora.id}>{hora.horario}</option>
+                                        ))}
+                                    </>
+                                )}
+                            </select>
                         )}
-                    </select>
-                )}
-            </label>
-            <label className="block mb-2">
-                <input
-                    type="checkbox"
-                    checked={agregarOtroHorario}
-                    onChange={() => setAgregarOtroHorario(!agregarOtroHorario)}
-                />
-                Agregar otro horario
-            </label>
-            <br />
-            <label className="block mb-2">
-                Cliente:
-                <select name="ClienteId" value={formData.ClienteId} onChange={handleChange2} className="border border-gray-300 px-2 py-1 text-black">
-                    <option value="" disabled defaultValue>Selecciona un cliente</option>
-                    {todosClientes?.resultsAll?.map((cliente) => (
-                        <option value={cliente.id} key={cliente.id}>{cliente.name} {cliente.lastName}</option>
-                    ))}
-                </select>
+                    </label>
+                    <label className="flex space-x-2 text-center justify-center">
+                        <input
+                            type="checkbox"
+                            checked={agregarOtroHorario}
+                            onChange={() => setAgregarOtroHorario(!agregarOtroHorario)}
+                        />
+                        <p>Agregar otro horario</p>
+                    </label>
+                </div>
+                <div className="my-4 space-y-2 text-center">
+                    <h1>Cliente:</h1>
+                    <label className="block mb-2">
+                        <select name="ClienteId" value={formData.ClienteId} onChange={handleChange2} className="border border-gray-300 px-2 py-1 text-black">
+                            <option value="" disabled defaultValue>Selecciona un cliente</option>
+                            {todosClientes?.resultsAll?.map((cliente) => (
+                                <option value={cliente.dni} key={cliente.dni}>{cliente.name} {cliente.lastName}</option>
+                            ))}
+                        </select>
+                    </label>
+                </div>
+                <div className="my-4 space-y-2 text-center">
+                    <h1>Estado:</h1>
+                    <label className="block mb-2">
+                        <select name="statusTurn" value={formData.statusTurn} onChange={handleChange2} className="border border-gray-300 px-2 py-1 text-black">
+                            <option value="" disabled defaultValue>Selecciona un estado</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="confirmado">Confirmado</option>
+                            <option value="realizado">Realizado</option>
+                        </select>
+                    </label>
+                </div>
+                <div className="flex justify-center">
+                    <button type="submit" className="bg-blue-500   text-white px-4 py-2 rounded">Enviar</button>
+                </div>
+            </form>
+        </section>
 
-            </label>
-            <br />
-            <label className="block mb-2">
-                Estado:
-                <select name="statusTurn" value={formData.statusTurn} onChange={handleChange2} className="border border-gray-300 px-2 py-1 text-black">
-                    <option value="" disabled defaultValue>Selecciona un estado</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="confirmado">Confirmado</option>
-                    <option value="realizado">Realizado</option>
-                </select>
-            </label>
-            <br />
-
-            <br />
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Enviar</button>
-        </form>
     );
 };
