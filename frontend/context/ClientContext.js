@@ -52,7 +52,7 @@ export function ClientProvider({ children }) {
         const decode = decodeJWT(tokenStorage);
         if (decode) {
           setUserLogged(decode.username);
-          setUserLoggedRole(decode.role)
+          setUserLoggedRole(decode.role);
         }
         setCargando(false);
       }
@@ -108,7 +108,8 @@ export function ClientProvider({ children }) {
         setUserLogged,
         setCargando,
         cargando,
-        userLoggedRole
+        userLoggedRole,
+        setUserLoggedRole,
       }}
     >
       {children}

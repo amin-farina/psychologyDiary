@@ -14,7 +14,7 @@ export const getTurnoById = async (req, res) => {
 
 export const createTurno = async (req, res) => {
   try {
-    const { ClienteId, fecha, statusTurn, hora, dia } = req.body;
+    const { dni, fecha, statusTurn, hora, dia } = req.body;
 
     const horarioDeseado = hora;
     const fechaDeseada = fecha;
@@ -29,7 +29,7 @@ export const createTurno = async (req, res) => {
     if (turnoExistente) {
       return res.status(400).json({ error: "El turno no esta disponible" });
     } else {
-      const clienteExistente = await Cliente.findByPk(ClienteId);
+      const clienteExistente = await Cliente.findByPk(dni);
       if (!clienteExistente) {
         return res.status(400).json({ error: "Cliente no encontrado" });
       }
@@ -38,7 +38,7 @@ export const createTurno = async (req, res) => {
       const telefonoCliente = clienteExistente.telefono;
       const emailCliente = clienteExistente.email;
       const turno = await Turnos.create({
-        dni: ClienteId,
+        dni: dni,
         fecha,
         hora,
         statusTurn,
@@ -51,7 +51,7 @@ export const createTurno = async (req, res) => {
 
       await HistorialTurnos.create({
         turnoId: turno.id,
-        dni: ClienteId,
+        dni: dni,
         fechaHistorial: fecha,
         nombreCliente: nombreCliente,
         statusTurn: turno.statusTurn,

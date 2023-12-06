@@ -1,9 +1,9 @@
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
-import { decrypt } from "dotenv";
 import jwt from "jsonwebtoken";
 
 export const getAllUser = async (req, res) => {
+  console.log("Estoy entrando a AllUser");
   const users = await User.findAll();
   res.status(200).json({ users });
 };
@@ -102,5 +102,25 @@ export const updateUser = async (req, res) => {
     res.status(200).json({ user });
   } catch (err) {
     res.status(500).json({ err });
+  }
+};
+
+export const getUsuariosAll = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      where: {
+        role: "usuario",
+      },
+    });
+
+    if (users.length > 0) {
+      res.status(200).json({ users });
+    } else {
+      res
+        .status(404)
+        .json({ message: "No se encontraron usuarios con el rol 'usuario'." });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Error interno del servidor." });
   }
 };

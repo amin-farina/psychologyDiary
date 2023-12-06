@@ -8,6 +8,7 @@ const Cliente = db.define(
     dni: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
     },
     name: {
       allowNull: false,
@@ -31,6 +32,5 @@ const Cliente = db.define(
     timestamps: false,
   }
 );
-
 
 export default Cliente;

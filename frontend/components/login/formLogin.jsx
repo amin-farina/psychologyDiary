@@ -4,6 +4,7 @@ import { postLoginUser } from "@/app/api/service";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation'
 import { useClientContext } from "@/context/ClientContext";
+import Spinner from "../spinner";
 
 
 export default function FormLogin() {
@@ -15,27 +16,26 @@ export default function FormLogin() {
     const [token, setToken] = useState()
     const [error, setError] = useState()
     const [loading, setLoading] = useState(false)
-    const { setCargando } = useClientContext();
+    const { setCargando, userLoggedRole } = useClientContext();
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
-
     useEffect(() => {
-        const tokenStorage = localStorage.getItem("token")
-        if (tokenStorage) {
-            router.push("/")
+        if (userLoggedRole === "admin") {
+            router.push("/admin");
+        } else if (userLoggedRole === "usuario") {
+            router.push("/usuario");
         }
-    }, [])
+        setLoading(false);
+    }, [userLoggedRole, loading]);
 
     useEffect(() => {
         if (token !== undefined) {
             localStorage.setItem("token", token)
-            setLoading(false)
             setCargando(true)
-            router.push("/")
         }
     }, [token, loading])
 
@@ -49,6 +49,8 @@ export default function FormLogin() {
             }
             if (response.message) {
                 setError(response.message)
+                setLoading(false)
+
             }
         } catch (err) {
             console.log(err)
@@ -61,7 +63,7 @@ export default function FormLogin() {
     return (
         <>
             {loading ? (
-                <h1>cargando</h1>
+                <Spinner />
             ) : (
                 <section className="flex justify-center w-screen items-center min-h-[80vh]">
                     <div className="w-1/3 border px-8 py-5">

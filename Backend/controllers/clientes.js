@@ -7,8 +7,17 @@ export const getAllClientes = async (req, res) => {
 };
 
 export const getClienteById = async (req, res) => {
-  const cliente = await Cliente.findByPk(req.params.clienteId);
+  const cliente = await Cliente.findByPk(req.params.dni);
   res.status(200).json({ cliente });
+};
+
+export const getClienteByUser = async (req, res) => {
+  const clientes = await Cliente.findAll({
+    where: {
+      username: req.params.username
+    }
+  });
+  res.status(200).json({ clientes });
 };
 
 export const createCliente = async (req, res) => {

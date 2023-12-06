@@ -5,10 +5,13 @@ import Link from "next/link"
 import { useClientContext } from '@/context/ClientContext';
 import Logout from './login/logout';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export function NavBar() {
   const pathname = usePathname();
-  const { userLogged, userLoggedRole, setUserLogged } = useClientContext()
+  const router = useRouter();
+
+  const { userLogged, setUserLoggedRole, userLoggedRole, setUserLogged } = useClientContext()
   const links = [
     { name: 'Inicio', href: '/' },
     { name: 'Contacto', href: '/contacto' },
@@ -35,7 +38,6 @@ export function NavBar() {
 
 
   useEffect(() => {
-    console.log("Role:", userLoggedRole)
     if (userLoggedRole === "usuario") {
       setLinksPage(linkUsuario)
     }
@@ -50,7 +52,8 @@ export function NavBar() {
     setLinksPage(links)
     localStorage.removeItem("token")
     setUserLogged("")
-
+    setUserLoggedRole("")
+    router.push("/")
   }
 
   return (
@@ -70,10 +73,10 @@ export function NavBar() {
           );
         })}
         {userLogged ? (
-          <l1 className='list-none flex space-x-2 items-center'>
+          <li className='list-none flex space-x-2 items-center'>
             <h1>{userLogged}</h1>
             <button onClick={(e) => handleLogout(e)} className='bg-red-700 px-2 py-1 rounded'>Salir</button>
-          </l1>
+          </li>
         ) : (<li className='list-none flex items-center'>
           <Link href="/login" className={` p-1 font-bold rounded`}>
             Login

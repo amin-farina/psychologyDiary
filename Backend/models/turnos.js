@@ -37,12 +37,13 @@ const Turnos = db.define(
       type: DataTypes.BOOLEAN,
       defaultValue: true, // Por defecto, todos los turnos están disponibles
     },
+    dni: {
+      type: DataTypes.INTEGER,
+    },
   },
   {
     timestamps: false,
   }
 );
-
-Turnos.belongsTo(Cliente);
 
 export default Turnos;

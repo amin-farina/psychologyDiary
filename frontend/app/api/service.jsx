@@ -15,7 +15,21 @@ export async function getAllClients() {
 }
 
 export async function getClientById(id) {
-    const res = await fetch(`http://localhost:3001/api/clientes/${id}`, {
+    const res = await fetch(`http://localhost:3001/api/clientes/getclienteid/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        cache: 'force-cache',
+    })
+    const resultsId = (await res.json())?.cliente
+    return {
+        props: { resultsId },
+    }
+}
+
+export async function getClientByUsername(id) {
+    const res = await fetch(`http://localhost:3001/api/clientes/getUsuarios/${username}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -157,3 +171,4 @@ export async function postLoginUser(data) {
         results
     }
 }
+

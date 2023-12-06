@@ -4,6 +4,7 @@ import {
   deleteUser,
   getAllUser,
   getUserByUsername,
+  getUsuariosAll,
   loginUser,
   updateUser,
 } from "../controllers/user.js";
@@ -11,7 +12,8 @@ import {
 const userRoutes = Router();
 
 userRoutes.get("/", getAllUser);
-userRoutes.get("/:username", getUserByUsername);
+userRoutes.get("/byUsername/:username", getUserByUsername);
+userRoutes.get("/getUsuarios", getUsuariosAll);
 userRoutes.post("/create", createUser);
 userRoutes.post("/login", loginUser);
 userRoutes.put("/update/:username", updateUser);
