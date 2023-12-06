@@ -5,6 +5,7 @@ import {
   getAllClients,
   getAllTurnosDisponibles,
 } from "@/app/api/service";
+import { decodeJWT } from "@/utils/jwt";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const ClientContext = createContext();
@@ -12,11 +13,16 @@ const ClientContext = createContext();
 export function ClientProvider({ children }) {
   const [todosClientes, setTodosClientes] = useState([]);
   const [newClient, setNewClient] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [todosTurnos, setTodosTurnos] = useState([]);
   const [newAppointment, setNewAppointment] = useState(false);
   const [turnosDisponibles, setTurnosDisponibles] = useState([]);
   const [nuevoTurnoDisponible, setNuevoTurnoDisponible] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  //Login
+  const [userLogged, setUserLogged] = useState();
+  const [userLoggedRole, setUserLoggedRole] = useState();
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +38,28 @@ export function ClientProvider({ children }) {
 
     fetchData();
   }, [newClient, loading]);
+
+  useEffect(() => {
+    if (!userLogged) {
+      const tokenStorage = localStorage.getItem("token");
+      if (
+        !tokenStorage ||
+        tokenStorage === null ||
+        tokenStorage === undefined
+      ) {
+        setCargando(false);
+      } else {
+        const decode = decodeJWT(tokenStorage);
+        if (decode) {
+          setUserLogged(decode.username);
+          setUserLoggedRole(decode.role)
+        }
+        setCargando(false);
+      }
+    } else {
+      setCargando(false);
+    }
+  }, [cargando]);
 
   useEffect(() => {
     const fetchAppointment = async () => {
@@ -76,6 +104,11 @@ export function ClientProvider({ children }) {
         turnosDisponibles,
         nuevoTurnoDisponible,
         setNuevoTurnoDisponible,
+        userLogged,
+        setUserLogged,
+        setCargando,
+        cargando,
+        userLoggedRole
       }}
     >
       {children}

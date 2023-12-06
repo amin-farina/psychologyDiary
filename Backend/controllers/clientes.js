@@ -1,4 +1,5 @@
 import Cliente from "../models/clientes.js";
+import { getUserByUsername2 } from "./user.js";
 
 export const getAllClientes = async (req, res) => {
   const clientes = await Cliente.findAll();
@@ -12,10 +13,36 @@ export const getClienteById = async (req, res) => {
 
 export const createCliente = async (req, res) => {
   try {
-    const cliente = await Cliente.create(req.body);
-    res.status(200).json({ cliente });
+    const { dni, name, lastName, email, telefono } = req.body;
+    const username = req.body.username;
+
+    try {
+      const responseUser = await getUserByUsername2(username);
+      if (responseUser === null) {
+        res.status(404).json({ message: "Usuario no encontrado." });
+        return;
+      }
+    } catch (err) {
+      res.status(404).json({ message: "Usuario no encontrado." });
+      return;
+    }
+
+    const cliente = await Cliente.create({
+      dni,
+      name,
+      lastName,
+      email,
+      telefono,
+      username,
+    });
+
+    res.status(200).json({ message: "Cliente creado con éxito.", cliente });
   } catch (err) {
-    res.status(500).json({ err });
+    console.error("Error al crear el cliente:", err);
+    res.status(500).json({
+      message:
+        "Error interno del servidor. Por favor, inténtalo de nuevo más tarde.",
+    });
   }
 };
 

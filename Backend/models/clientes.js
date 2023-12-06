@@ -1,11 +1,11 @@
 import db from "../db.js";
 import { DataTypes } from "sequelize";
+import User from "./user.js";
 
 const Cliente = db.define(
   "Cliente",
   {
     dni: {
-      primaryKey: true,
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -22,10 +22,15 @@ const Cliente = db.define(
     telefono: {
       type: DataTypes.STRING,
     },
+    username: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
   },
   {
     timestamps: false,
   }
 );
+
 
 export default Cliente;

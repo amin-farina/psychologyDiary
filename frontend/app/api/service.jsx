@@ -141,3 +141,19 @@ export async function getAllTurnosDisponibles() {
         props: { resultsAll }
     }
 }
+
+
+
+export async function postLoginUser(data) {
+    const res = await fetch("http://localhost:3001/api/user/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    const results = await res.json()
+    return {
+        results
+    }
+}
