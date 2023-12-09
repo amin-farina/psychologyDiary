@@ -20,7 +20,6 @@ export async function getClientById(id) {
         headers: {
             "Content-Type": "application/json",
         },
-        cache: 'force-cache',
     })
     const resultsId = (await res.json())?.cliente
     return {
@@ -28,13 +27,12 @@ export async function getClientById(id) {
     }
 }
 
-export async function getClientByUsername(id) {
+export async function getClientByUsername(username) {
     const res = await fetch(`http://localhost:3001/api/clientes/getUsuarios/${username}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
         },
-        cache: 'force-cache',
     })
     const resultsId = (await res.json())?.cliente
     return {
@@ -68,8 +66,8 @@ export async function updateClient(id, data) {
 }
 
 
-export async function deleteClient(id) {
-    const res = await fetch(`http://localhost:3001/api/clientes/${id}`, {
+export async function deleteClient(dni) {
+    const res = await fetch(`http://localhost:3001/api/clientes/${dni}`, {
         method: 'DELETE',
         headers: {
             'Content-type': 'application/json'

@@ -57,11 +57,11 @@ export const createCliente = async (req, res) => {
 
 export const deleteCliente = async (req, res) => {
   try {
-    const cliente = await Cliente.findByPk(req.params.clienteId);
+    const cliente = await Cliente.findByPk(req.params.dni);
     try {
       const destroy = Cliente.destroy({
         where: {
-          id: req.params.clienteId,
+          dni: req.params.dni,
         },
       });
     } catch (err) {
@@ -77,7 +77,7 @@ export const updateCliente = async (req, res) => {
   try {
     const cliente = await Cliente.update(req.body, {
       where: {
-        dni: req.params.clienteId,
+        dni: req.params.dni,
       },
     });
     res.status(200).json({ cliente });

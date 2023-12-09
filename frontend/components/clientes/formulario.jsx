@@ -1,10 +1,10 @@
 "use client"
-import { postNewClient } from "@/app/api/service";
+import { getClientById, postNewClient, updateClient } from "@/app/api/service";
 import { getAllUsersUsuarios } from "@/app/api/usuarios";
 import { useClientContext } from "@/context/ClientContext";
 import { useEffect, useState } from "react";
 
-export function FormularioCliente({ role }) {
+export function FormularioCliente({ role, accion, dni, onAccionChange }) {
     const [formData, setFormData] = useState({
         dni: '',
         name: '',
@@ -23,6 +23,7 @@ export function FormularioCliente({ role }) {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,31 +33,70 @@ export function FormularioCliente({ role }) {
                 console.error("Error al obtener usuarios:", error);
             }
         };
+        const fetchInfo = async () => {
+
+            const res = (await getClientById(dni))?.props.resultsId;
+            setFormData({
+                dni: res.dni,
+                name: res.name,
+                lastName: res.lastName,
+                email: res.email,
+                telefono: res.telefono,
+                username: res.username
+            })
+        }
+
         if (role === "usuario") {
             setProfesionales([])
             setFormData((prevData) => ({ ...prevData, username: userLogged }))
         } else {
             fetchData();
         }
-    }, []);
+        if (accion === "editar") {
+            console.log("Entre en editar")
+            fetchInfo();
+        }
+
+    }, [accion, dni, newClient]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        try {
-            await postNewClient(formData);
-            setNewClient(!newClient)
-            setFormData({
-                dni: '',
-                name: '',
-                lastName: '',
-                email: '',
-                telefono: '',
-                username: ''
-            });
-        } catch (error) {
-            console.error('Error al enviar datos:', error);
+        if (accion === "crear") {
+            try {
+                await postNewClient(formData);
+                setNewClient(!newClient)
+                setFormData({
+                    dni: '',
+                    name: '',
+                    lastName: '',
+                    email: '',
+                    telefono: '',
+                    username: ''
+                });
+                onAccionChange("")
+            } catch (error) {
+                console.error('Error al enviar datos:', error);
+            }
+        } else {
+            if (accion === "editar") {
+                try {
+                    await updateClient(dni, formData);
+                    setFormData({
+                        dni: '',
+                        name: '',
+                        lastName: '',
+                        email: '',
+                        telefono: '',
+                        username: ''
+                    });
+                    setNewClient(!newClient)
+                    onAccionChange("")
+                } catch (error) {
+                    console.error('Error al enviar datos:', error);
+                }
+            }
         }
+
     };
 
     return (
@@ -65,7 +105,7 @@ export function FormularioCliente({ role }) {
                 <div className="my-4 space-y-2 ">
                     <h1>DNI:</h1>
                     <label className="block">
-                        <input type="text" name="dni" value={formData.dni} onChange={handleChange} className="border border-gray-300 px-2 py-1 text-black" />
+                        <input type="text" name="dni" value={formData.dni} disabled={accion === "editar"} onChange={handleChange} className="border border-gray-300 px-2 py-1 text-black" />
                     </label>
                 </div>
                 <div className="my-4 space-y-2">
@@ -109,7 +149,10 @@ export function FormularioCliente({ role }) {
                         </label>
                     </div>
                 )}
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded w-full mt-5">Enviar</button>
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded w-full mt-5">
+                    {accion === "editar" && (<h1>Modificar Cliente</h1>)}
+                    {accion === "crear" && (<h1> Crear Cliente</h1>)}
+                </button>
             </form>
         </section>
     );

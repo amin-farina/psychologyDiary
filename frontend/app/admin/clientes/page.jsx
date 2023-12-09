@@ -5,7 +5,6 @@ export default function ClientesAdminPage() {
     return (
         <section className="flex justify-center items-center flex-wrap w-screen min-h-[80vh]">
             <MostrarCliente role="admin" />
-            <FormularioCliente role="admin" />
         </section>
     )
 }

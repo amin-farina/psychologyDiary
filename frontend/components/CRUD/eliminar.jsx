@@ -47,7 +47,7 @@ export function EliminarElemento({ id, type }) {
 
   return (
     <>
-      <button className="text-bold text-red-700" onClick={handleDelete}>X</button>
+      <button className="text-bold text-red-700" onClick={handleDelete}>Eliminar</button>
     </>
   );
 }
