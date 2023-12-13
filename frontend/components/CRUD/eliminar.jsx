@@ -1,4 +1,5 @@
-import { deleteClient, deleteAppointment } from "@/app/api/service";
+import { deleteAppointment } from "@/app/api/service";
+import { deleteClient } from "@/app/api/cliente"
 import { useClientContext } from "@/context/ClientContext";
 import Swal from 'sweetalert2';
 

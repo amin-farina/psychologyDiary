@@ -27,6 +27,9 @@ const Cliente = db.define(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    nombreProfesional: {
+      type: DataTypes.STRING,
+    },
   },
   {
     timestamps: false,

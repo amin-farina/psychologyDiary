@@ -3,9 +3,8 @@ import { MostrarCliente } from "@/components/clientes/mostrarClientes";
 
 export default function Clientes() {
     return (
-       <section className="flex flex-wrap justify-center  items-center">
+        <section className="flex flex-wrap justify-center  items-center">
             <MostrarCliente />
-            <FormularioCliente />
-       </section>
+        </section>
     )
 }

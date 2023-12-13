@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  getAllAppointment,
-  getAllClients,
-  getAllTurnosDisponibles,
-} from "@/app/api/service";
+import { getAllAppointment, getAllTurnosDisponibles } from "@/app/api/service";
+import { getAllClients, getClientByUsername } from "@/app/api/cliente";
 import { decodeJWT } from "@/utils/jwt";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -25,19 +22,35 @@ export function ClientProvider({ children }) {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const allClients = (await getAllClients()).props;
-        setTodosClientes(allClients);
-      } catch (err) {
-        console.error("Error fetching clients:", err);
-      } finally {
-        setLoading(false);
+    const fetchData = async (role, username) => {
+      if (role === "admin") {
+        try {
+          const allClients = (await getAllClients())?.props.resultsAll;
+          setTodosClientes(allClients);
+          console.log("Set all clients admin", allClients.resultsId);
+        } catch (err) {
+          console.error("Error fetching clients for admin:", err);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        if (role === "usuario") {
+          try {
+            const allClients = (await getClientByUsername(username))?.props
+              .resultsId;
+            setTodosClientes(allClients);
+            console.log("Set all clients user", allClients);
+          } catch (err) {
+            console.log("Error fetching clients for user: ", err);
+          } finally {
+            setLoading(false);
+          }
+        }
       }
     };
 
-    fetchData();
-  }, [newClient, loading]);
+    fetchData(userLoggedRole, userLogged);
+  }, [newClient, loading, userLoggedRole, userLogged]);
 
   useEffect(() => {
     if (!userLogged) {

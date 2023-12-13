@@ -1,10 +1,10 @@
 "use client"
-import { getClientById, postNewClient, updateClient } from "@/app/api/service";
+import { getClientById, postNewClient, updateClient } from "@/app/api/cliente";
 import { getAllUsersUsuarios } from "@/app/api/usuarios";
 import { useClientContext } from "@/context/ClientContext";
 import { useEffect, useState } from "react";
 
-export function FormularioCliente({ role, accion, dni, onAccionChange }) {
+export function FormularioCliente({ accion, dni, onAccionChange }) {
     const [formData, setFormData] = useState({
         dni: '',
         name: '',
@@ -15,7 +15,7 @@ export function FormularioCliente({ role, accion, dni, onAccionChange }) {
     });
 
 
-    const { newClient, setNewClient, userLogged } = useClientContext()
+    const { newClient, setNewClient, userLogged, userLoggedRole } = useClientContext()
     const [profesionales, setProfesionales] = useState([])
 
     const handleChange = (e) => {
@@ -46,7 +46,7 @@ export function FormularioCliente({ role, accion, dni, onAccionChange }) {
             })
         }
 
-        if (role === "usuario") {
+        if (userLoggedRole === "usuario") {
             setProfesionales([])
             setFormData((prevData) => ({ ...prevData, username: userLogged }))
         } else {
@@ -57,7 +57,7 @@ export function FormularioCliente({ role, accion, dni, onAccionChange }) {
             fetchInfo();
         }
 
-    }, [accion, dni, newClient]);
+    }, [accion, dni, newClient, userLoggedRole]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -132,7 +132,7 @@ export function FormularioCliente({ role, accion, dni, onAccionChange }) {
                         <input type="tel" name="telefono" value={formData.telefono} onChange={handleChange} className="border border-gray-300 px-2 py-1 text-black" />
                     </label>
                 </div>
-                {role === 'admin' && (
+                {userLoggedRole === 'admin' && (
                     <div className="my-4 space-y-2">
                         <h1>Profesional</h1>
                         <label className="block">

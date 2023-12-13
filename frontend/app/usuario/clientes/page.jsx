@@ -4,8 +4,7 @@ import { MostrarCliente } from "@/components/clientes/mostrarClientes";
 export default function ClientesPage() {
     return (
         <section className="flex justify-center items-center flex-wrap w-screen min-h-[80vh]">
-            <MostrarCliente role="usuario" />
-            <FormularioCliente role="usuario" />
+            <MostrarCliente />
         </section>
     )
 }
