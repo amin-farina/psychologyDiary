@@ -1,10 +1,11 @@
 "use client"
 import { postNewAppointment } from "@/app/api/service";
 import { useClientContext } from "@/context/ClientContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ObtenerElDia } from "./obtenerElDia";
 import { format } from 'date-fns';
 import Swal from "sweetalert2";
+import { getAllUsersUsuarios } from "@/app/api/usuarios";
 
 const obtenerTurnosDisponibles = (fechaSeleccionada, diaSeleccionado, turnosPredefinidos, turnosOcupados) => {
     const turnosParaElDia = turnosPredefinidos
@@ -23,13 +24,14 @@ export function FormularioTurno() {
         dni: '',
         statusTurn: '',
         hora: '',
+        username: ''
     });
     const [fechaFormateada, setFechaFormateada] = useState()
     const [turnoDisp, setTurnoDisp] = useState()
     const [agregarOtroHorario, setAgregarOtroHorario] = useState(false);
+    const [profesionales, setProfesionales] = useState()
 
-    const { newAppointment, setNewAppointment, todosClientes, turnosDisponibles, todosTurnos } = useClientContext()
-    console.log("todos los clientes", todosClientes)
+    const { newAppointment, setNewAppointment, todosClientes, turnosDisponibles, todosTurnos, userLogged, userLoggedRole } = useClientContext()
     const handleChange2 = (e) => {
         const { name, value } = e.target;
         if (name === "fecha") {
@@ -46,8 +48,28 @@ export function FormularioTurno() {
         }
     };
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getAllUsersUsuarios();
+                setProfesionales(res.props.results);
+            } catch (error) {
+                console.error("Error al obtener usuarios:", error);
+            }
+        };
+        if (userLoggedRole === "admin") {
+            fetchData()
+        }
+        if (userLoggedRole === "usuario") {
+            setFormData((prevData) => ({ ...prevData, ["username"]: userLogged }))
+        }
+    }, [userLoggedRole, newAppointment])
+
     const handleSubmit2 = async (e) => {
         e.preventDefault();
+        if (userLoggedRole === "usuario") {
+            setFormData((prevData) => ({ ...prevData, ["username"]: userLogged }))
+        }
         Swal.fire({
             title: "¿Estás seguro que quieres este turno?",
             html: `Datos del turno: <br> El dia <b>${formData.dia}</b> a las <b>${formData.hora}</b>, el dia de la fecha es el <b>${fechaFormateada}</b>`,
@@ -61,7 +83,6 @@ export function FormularioTurno() {
                 try {
                     const agregarNuevoTurno = (await postNewAppointment(formData)).props;
                     setNewAppointment(!newAppointment)
-                    console.log(agregarNuevoTurno)
                     if ('error' in agregarNuevoTurno) {
                         Swal.fire({
                             title: "Error al agregar el nuevo turno",
@@ -87,6 +108,7 @@ export function FormularioTurno() {
                         dni: '',
                         statusTurn: '',
                         hora: '',
+                        username: ''
                     });
                 } catch (error) {
                     Swal.fire({
@@ -100,8 +122,11 @@ export function FormularioTurno() {
     };
 
     return (
-        <section className="flex justify-center">
-            <form onSubmit={handleSubmit2} className="">
+        <section className="flex flex-wrap justify-center text-center">
+            <div className="w-full">
+                <h1 className="text-2xl font-bold">Agregar Turno</h1>
+            </div>
+            <form onSubmit={handleSubmit2} className="w-full">
                 <div className="my-4 space-y-2 text-center">
                     <h1>Fecha:</h1>
                     <label className="block mb-2">
@@ -167,6 +192,19 @@ export function FormularioTurno() {
                         </select>
                     </label>
                 </div>
+                {userLoggedRole === 'admin' && (
+                    <div className="my-4 space-y-2">
+                        <h1>Profesional</h1>
+                        <label className="block">
+                            <select name="username" onChange={handleChange2} value={formData.username} className="border border-gray-300 px-2 py-1 text-black">
+                                <option value="" disabled defaultValue>Seleccionar Profesional</option>
+                                {profesionales?.map((user) => (
+                                    <option key={user.username} value={user.username}>{user.name}</option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+                )}
                 <div className="my-4 space-y-2 text-center">
                     <h1>Estado:</h1>
                     <label className="block mb-2">

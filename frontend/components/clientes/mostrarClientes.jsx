@@ -127,7 +127,7 @@ export function MostrarCliente() {
                                         <td>{resultSearch?.name} {resultSearch?.lastName}</td>
                                         <td><a href={`mailto:${resultSearch?.email}`} target="_blank">{resultSearch?.email}</a></td>
                                         <td><a href={`${apiWhatsapp}${resultSearch?.telefono}`} target="_blank">{resultSearch?.telefono}</a> </td>
-                                        <td><button onClick={() => handleModify(resultSearch?.dni)}>Modificar</button></td>
+                                        <td><button onClick={() => handleModify(resultSearch?.dni)}>{resultSearch && (<p>Modificar</p>)}</button></td>
                                     </>
                                 )}
                             </tr>

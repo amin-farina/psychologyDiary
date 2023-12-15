@@ -1,4 +1,5 @@
 "use client"
+import { FormularioTurno } from "@/components/turnos/agregarTurno"
 import { ListadoDeTurnos } from "@/components/turnos/listadoDeTurnos"
 import { TurnosDisponibles } from "@/components/turnos/turnosDisponibles"
 import { useClientContext } from "@/context/ClientContext"
@@ -15,7 +16,14 @@ export default function UsuarioPage() {
             <div className="mx-auto container mb-5">
                 <TurnosDisponibles />
                 <div className="border w-full my-5"></div>
-                <ListadoDeTurnos />
+                <div className="w-full flex">
+                    <div className="w-1/2">
+                        <ListadoDeTurnos />
+                    </div>
+                    <div className="w-1/2">
+                        <FormularioTurno />
+                    </div>
+                </div>
             </div>
         </section>
     )
