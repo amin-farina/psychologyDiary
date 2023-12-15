@@ -15,6 +15,10 @@ const TurnosDisponibles = db.define(
     horario: {
       type: DataTypes.STRING,
     },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     timestamps: false,

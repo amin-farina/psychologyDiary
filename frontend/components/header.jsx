@@ -24,13 +24,13 @@ export function NavBar() {
   const linkUsuario = [
     { name: "Inicio", href: "/usuario" },
     { name: "Perfil", href: "/usuario/perfil" },
-    { name: "Clientes", href: "/usuario/clientes" },
+    { name: "Clientes", href: "/clientes" },
     { name: "Turnos", href: "/usuario/turnos" }
   ]
 
   const linkAdmin = [
     { name: "Inicio", href: "/admin" },
-    { name: "Clientes", href: "/admin/clientes" },
+    { name: "Clientes", href: "/clientes" },
     { name: "Usuarios", href: "/admin/usuarios" },
     { name: "Turnos", href: "/admin/turnos" },
     { name: "Bandeja", href: "/admin/bandeja" }

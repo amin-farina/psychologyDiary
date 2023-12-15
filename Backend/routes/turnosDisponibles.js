@@ -4,13 +4,15 @@ import {
   deleteTurnoDisponible,
   getAllTurnosDisponibles,
   getTurnoDisponibleById,
+  getTurnosDisponiblesbyUsername,
   updateTurnoDisponible,
 } from "../controllers/turnosDisponibles.js";
 
 const turnosDisponiblesRoutes = Router();
 
 turnosDisponiblesRoutes.get("/", getAllTurnosDisponibles);
-turnosDisponiblesRoutes.get("/:turnoId", getTurnoDisponibleById);
+turnosDisponiblesRoutes.get("/getid/:turnoId", getTurnoDisponibleById);
+turnosDisponiblesRoutes.get("/getusername/:username", getTurnosDisponiblesbyUsername);
 turnosDisponiblesRoutes.post("/create", createTurnoDisponible);
 turnosDisponiblesRoutes.put("/:turnoId", updateTurnoDisponible);
 turnosDisponiblesRoutes.delete("/:turnoId", deleteTurnoDisponible);

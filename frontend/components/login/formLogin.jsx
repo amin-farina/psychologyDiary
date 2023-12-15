@@ -15,6 +15,7 @@ export default function FormLogin() {
     });
     const [token, setToken] = useState()
     const [error, setError] = useState()
+    const [mostrarContrasena, setMostrarContrasena] = useState(false);
     const [loading, setLoading] = useState(false)
     const { setCargando, userLoggedRole } = useClientContext();
     const handleChange = (e) => {
@@ -74,7 +75,7 @@ export default function FormLogin() {
                             <form onSubmit={handleSubmit} className="grid grid-1 justify-center">
                                 <div className="my-2 space-y-2 mx-2 text-center">
                                     Usuario:
-                                    <label className="block">
+                                    <label className="block w-full">
                                         <input
                                             type="text"
                                             name="username"
@@ -86,18 +87,25 @@ export default function FormLogin() {
                                 </div>
                                 <div className="my-2 space-y-2 mx-2 text-center">
                                     Contraseña:
-                                    <label className="block">
+                                    <label className="block relative">
                                         <input
-                                            type="password"
+                                            type={mostrarContrasena ? "text" : "password"}
                                             name="password"
                                             value={formData.password}
                                             onChange={handleChange}
-                                            className="border border-gray-300 px-2 py-1 text-black"
+                                            className="border border-gray-300 px-2 py-1 text-black w-full"
                                         />
+                                        <button
+                                            type="button"
+                                            onClick={() => setMostrarContrasena(!mostrarContrasena)}
+                                            className="absolute right-2 top-1/2 transform -translate-y-1/2 px-2 py-1 text-gray-600 cursor-pointer"
+                                        >
+                                            {mostrarContrasena ? "O" : "M"}
+                                        </button>
                                     </label>
                                 </div>
                                 <div className="mt-4 flex justify-center">
-                                    {error && <p className="text-red-700">{error}</p>}
+                                    {error && <p className="text-red-700">Error! {error}</p>}
                                 </div>
                                 <div className="mt-4 flex justify-center">
                                     <button type="submit" className="hover:bg-white text-white bg-purple-800 hover:text-black px-4 py-2 rounded">
@@ -105,6 +113,7 @@ export default function FormLogin() {
                                     </button>
                                 </div>
                             </form>
+
                         </div>
                     </div>
                 </section>

@@ -3,7 +3,7 @@ import { MostrarCliente } from "@/components/clientes/mostrarClientes";
 
 export default function Clientes() {
     return (
-        <section className="flex flex-wrap justify-center  items-center">
+        <section className="flex justify-center flex-wrap w-screen ">
             <MostrarCliente />
         </section>
     )

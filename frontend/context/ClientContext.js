@@ -1,7 +1,12 @@
 "use client";
 
-import { getAllAppointment, getAllTurnosDisponibles } from "@/app/api/service";
+import { getAllAppointment } from "@/app/api/service";
+import {
+  getAllTurnosDisponibles,
+  getTurnoDisponibleByUsername,
+} from "@/app/api/turnosDisponibles";
 import { getAllClients, getClientByUsername } from "@/app/api/cliente";
+import { getUserByUsername } from "@/app/api/usuarios";
 import { decodeJWT } from "@/utils/jwt";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -18,6 +23,7 @@ export function ClientProvider({ children }) {
 
   //Login
   const [userLogged, setUserLogged] = useState();
+  const [dataUserLogged, setDataUserLogged] = useState();
   const [userLoggedRole, setUserLoggedRole] = useState();
   const [cargando, setCargando] = useState(true);
 
@@ -27,7 +33,6 @@ export function ClientProvider({ children }) {
         try {
           const allClients = (await getAllClients())?.props.resultsAll;
           setTodosClientes(allClients);
-          console.log("Set all clients admin", allClients.resultsId);
         } catch (err) {
           console.error("Error fetching clients for admin:", err);
         } finally {
@@ -39,7 +44,6 @@ export function ClientProvider({ children }) {
             const allClients = (await getClientByUsername(username))?.props
               .resultsId;
             setTodosClientes(allClients);
-            console.log("Set all clients user", allClients);
           } catch (err) {
             console.log("Error fetching clients for user: ", err);
           } finally {
@@ -89,16 +93,35 @@ export function ClientProvider({ children }) {
   }, [newAppointment, loading]);
 
   useEffect(() => {
-    const fetchTurnosDisponibles = async () => {
+    const fetchDataUser = async () => {
       try {
-        const todosTurnosDisponibles = (await getAllTurnosDisponibles()).props;
-        setTurnosDisponibles(todosTurnosDisponibles);
+        const newUserLogged = (await getUserByUsername(userLogged))?.props
+          .resultsId?.user;
+        setDataUserLogged(newUserLogged);
       } catch (err) {
-        console.error("Erorr get TURNOS DISPONIBLES: ", err);
-      } finally {
-        setLoading(false);
+        console.log("Error al obtener datos del usuario loggeado");
       }
     };
+
+    fetchDataUser();
+  }, [userLogged]);
+
+  useEffect(() => {
+    const fetchTurnosDisponibles = async () => {
+      if (userLogged) {
+        try {
+          const todosTurnosDisponibles = (
+            await getTurnoDisponibleByUsername(userLogged)
+          ).props;
+          setTurnosDisponibles(todosTurnosDisponibles);
+        } catch (err) {
+          console.error("Erorr get TURNOS DISPONIBLES: ", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
     fetchTurnosDisponibles();
   }, [nuevoTurnoDisponible, loading]);
 
@@ -123,6 +146,7 @@ export function ClientProvider({ children }) {
         cargando,
         userLoggedRole,
         setUserLoggedRole,
+        dataUserLogged,
       }}
     >
       {children}

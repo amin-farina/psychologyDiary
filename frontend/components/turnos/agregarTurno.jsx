@@ -20,7 +20,7 @@ export function FormularioTurno() {
     const [formData, setFormData] = useState({
         fecha: '',
         dia: '',
-        ClienteId: '',
+        dni: '',
         statusTurn: '',
         hora: '',
     });
@@ -29,6 +29,7 @@ export function FormularioTurno() {
     const [agregarOtroHorario, setAgregarOtroHorario] = useState(false);
 
     const { newAppointment, setNewAppointment, todosClientes, turnosDisponibles, todosTurnos } = useClientContext()
+    console.log("todos los clientes", todosClientes)
     const handleChange2 = (e) => {
         const { name, value } = e.target;
         if (name === "fecha") {
@@ -36,7 +37,7 @@ export function FormularioTurno() {
             const diaObtenido = ObtenerElDia({ dia: fechaModificada.getDay() })
             const offset = fechaModificada.getTimezoneOffset();
             fechaModificada.setMinutes(fechaModificada.getMinutes() - offset);
-            setTurnoDisp(obtenerTurnosDisponibles(value, diaObtenido, (turnosDisponibles?.resultsAll), (todosTurnos?.appointments)));
+            setTurnoDisp(obtenerTurnosDisponibles(value, diaObtenido, (turnosDisponibles?.resultsId.turnos), (todosTurnos?.appointments)));
             setFechaFormateada(format(fechaModificada, "dd-MM-yyyy"))
             setFormData((prevData) => ({ ...prevData, ["dia"]: diaObtenido }));
             setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -83,7 +84,7 @@ export function FormularioTurno() {
                     setFormData({
                         fecha: '',
                         dia: '',
-                        ClienteId: '',
+                        dni: '',
                         statusTurn: '',
                         hora: '',
                     });
@@ -158,9 +159,9 @@ export function FormularioTurno() {
                 <div className="my-4 space-y-2 text-center">
                     <h1>Cliente:</h1>
                     <label className="block mb-2">
-                        <select name="ClienteId" value={formData.ClienteId} onChange={handleChange2} className="border border-gray-300 px-2 py-1 text-black">
+                        <select name="dni" value={formData.dni} onChange={handleChange2} className="border border-gray-300 px-2 py-1 text-black">
                             <option value="" disabled defaultValue>Selecciona un cliente</option>
-                            {todosClientes?.resultsAll?.map((cliente) => (
+                            {todosClientes?.map((cliente) => (
                                 <option value={cliente.dni} key={cliente.dni}>{cliente.name} {cliente.lastName}</option>
                             ))}
                         </select>

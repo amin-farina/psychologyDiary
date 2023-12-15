@@ -31,7 +31,9 @@ export function MostrarCliente() {
         }
     }, [userLoggedRole])
 
-
+    useEffect(() => {
+        setResultSearch()
+    }, [])
 
     const handleCreate = () => {
         setAccion("crear")
@@ -44,6 +46,7 @@ export function MostrarCliente() {
 
     const handleSearch = () => {
         setSearch(!search)
+        setResultSearch("")
     }
 
     const handleAccionChange = (nuevaAccion) => {
@@ -72,51 +75,62 @@ export function MostrarCliente() {
                     <h1 className="text-3xl font-bold">Tabla Clientes</h1>
                 </div>
                 <div className="w-1/3 flex justify-center">
-                    <button onClick={handleSearch} className="hover:bg-white text-white bg-cyan-800 hover:text-black px-4 py-2 rounded" >Buscar cliente</button>
+                    {search ? (
+                        <button onClick={handleSearch} className="hover:bg-white text-white bg-red-800 hover:text-black px-4 py-2 rounded" >Cerrar</button>
+                    ) : (
+                        <button onClick={handleSearch} className="hover:bg-white text-white bg-cyan-800 hover:text-black px-4 py-2 rounded" >Buscar cliente</button>
+                    )}
                     <button onClick={handleCreate} className="hover:bg-white text-white bg-purple-800 hover:text-black px-4 py-2 mx-2 rounded" >Crear cliente</button>
 
                 </div>
             </div>
-            {search && (
-                <div className="flex w-full justify-center mb-3">
-                    <form onSubmit={handleSubmitSearch} className="space-x-3">
-                        <input type="text" placeholder="Buscar por DNI" name="valor" value={valueSearch.valor} onChange={handleChangeSearch} className="border border-gray-300 px-2 py-1 text-black" />
-                        <button type="submit" className="px-3 py-1 bg-purple-700 rounded hover:bg-purple-300 hover:text-black">Buscar</button>
-                    </form>
-                </div>
-            )}
+
             <div className="w-screen flex justify-center ">
                 <table className="table-style">
+                    {search ? (
+                        <caption>
+                            <div className="flex flex-wrap w-full justify-center mb-3 ">
+                                <form onSubmit={handleSubmitSearch} className="space-x-3 w-full flex justify-center">
+                                    <input type="text" placeholder="Buscar por DNI" name="valor" value={valueSearch.valor} onChange={handleChangeSearch} className="border border-gray-300 px-2 py-1 text-black" />
+                                    <button type="submit" className="px-3 py-1 bg-purple-700 rounded hover:bg-purple-300 hover:text-black">Buscar</button>
+                                </form>
+                            </div>
+                        </caption>) : (null)}
                     <thead>
                         <tr>
                             {cabecera.map((option, index) => (
-                                <th key={index}>{option}</th>
+                                search ? (
+                                    resultSearch ? (
+                                        <th key={index}>{option}</th>
+                                    ) : (null)
+                                ) : (<th key={index}>{option}</th>)
                             ))}
-
                         </tr>
                     </thead>
                     <tbody>
                         {search ? (
-                            userLoggedRole === "admin" ? (
-                                <>
-                                    <td>{resultSearch?.dni}</td>
-                                    <td>{resultSearch?.name} {resultSearch?.lastName}</td>
-                                    <td><a href={`mailto:${resultSearch?.email}`} target="_blank">{resultSearch?.email}</a></td>
-                                    <td><a href={`${apiWhatsapp}${resultSearch?.telefono}`} target="_blank">{resultSearch?.telefono}</a> </td>
-                                    <td>{resultSearch?.nombreProfesional}</td>
-                                    {resultSearch &&
-                                        <td className="space-x-3"> <button onClick={() => handleModify(resultSearch?.dni)}>Modificar</button> <EliminarElemento id={resultSearch?.dni} type="client" /> </td>
-                                    }
-                                </>
-                            ) : (
-                                <>
-                                    <td>{resultSearch?.dni}</td>
-                                    <td>{resultSearch?.name} {resultSearch?.lastName}</td>
-                                    <td><a href={`mailto:${resultSearch?.email}`} target="_blank">{resultSearch?.email}</a></td>
-                                    <td><a href={`${apiWhatsapp}${resultSearch?.telefono}`} target="_blank">{resultSearch?.telefono}</a> </td>
-                                    <td><button onClick={() => handleModify(resultSearch?.dni)}>Modificar</button></td>
-                                </>
-                            )
+                            <tr className="text-center">
+                                {userLoggedRole === "admin" ? (
+                                    <>
+                                        <td>{resultSearch?.dni}</td>
+                                        <td>{resultSearch?.name} {resultSearch?.lastName}</td>
+                                        <td><a href={`mailto:${resultSearch?.email}`} target="_blank">{resultSearch?.email}</a></td>
+                                        <td><a href={`${apiWhatsapp}${resultSearch?.telefono}`} target="_blank">{resultSearch?.telefono}</a> </td>
+                                        <td>{resultSearch?.nombreProfesional}</td>
+                                        {resultSearch &&
+                                            <td className="space-x-3"> <button onClick={() => handleModify(resultSearch?.dni)}>Modificar</button> <EliminarElemento id={resultSearch?.dni} type="client" /> </td>
+                                        }
+                                    </>
+                                ) : (
+                                    <>
+                                        <td>{resultSearch?.dni}</td>
+                                        <td>{resultSearch?.name} {resultSearch?.lastName}</td>
+                                        <td><a href={`mailto:${resultSearch?.email}`} target="_blank">{resultSearch?.email}</a></td>
+                                        <td><a href={`${apiWhatsapp}${resultSearch?.telefono}`} target="_blank">{resultSearch?.telefono}</a> </td>
+                                        <td><button onClick={() => handleModify(resultSearch?.dni)}>Modificar</button></td>
+                                    </>
+                                )}
+                            </tr>
                         ) : (
                             todosClientes?.map((cliente) => (
                                 <tr key={cliente.dni} className="text-center">

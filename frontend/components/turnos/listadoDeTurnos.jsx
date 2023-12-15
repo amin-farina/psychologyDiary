@@ -8,6 +8,7 @@ export function ListadoDeTurnos() {
     const { todosTurnos, loading, setLoading, turnosDisponibles } = useClientContext()
 
     const formatearFecha = (fecha) => {
+        console.log(fecha)
         const fechaModificada = new Date(`${fecha}T12:00:00Z`);
         return (
             format(fechaModificada, "dd-MM-yyyy")
@@ -16,7 +17,6 @@ export function ListadoDeTurnos() {
 
     const hundleButton = () => {
         setLoading(!loading)
-        console.log(turnosDisponibles.resultsAll)
     }
     return (
         <section className="w-full justify-center flex">

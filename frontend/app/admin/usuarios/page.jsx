@@ -1,5 +1,7 @@
+import { MostrarUsuarios } from "@/components/usuarios/mostrarUsuarios";
+
 export default function UsuariosAdminPage() {
     return (
-        <h1>Usuarios Admin Page</h1>
+        <MostrarUsuarios />
     )
 }
