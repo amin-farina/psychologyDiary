@@ -1,6 +1,7 @@
 import Turnos from "../models/turnos.js";
 import Cliente from "../models/clientes.js";
 import HistorialTurnos from "../models/historial.js";
+import User from "../models/user.js";
 
 export const getAllTurnos = async (req, res) => {
   const turno = await Turnos.findAll();
@@ -12,9 +13,18 @@ export const getTurnoById = async (req, res) => {
   res.status(200).json({ turno });
 };
 
+export const getTurnoByUser = async (req, res) => {
+  const turno = await Turnos.findAll({
+    where: {
+      username: req.params.username,
+    },
+  });
+  res.status(200).json({ turno });
+};
+
 export const createTurno = async (req, res) => {
   try {
-    const { dni, fecha, statusTurn, hora, dia } = req.body;
+    const { dni, fecha, statusTurn, hora, dia, username } = req.body;
 
     const horarioDeseado = hora;
     const fechaDeseada = fecha;
@@ -33,6 +43,12 @@ export const createTurno = async (req, res) => {
       if (!clienteExistente) {
         return res.status(400).json({ error: "Cliente no encontrado" });
       }
+      const userExistente = await User.findOne({
+        where: { username: username },
+      });
+      if (!userExistente) {
+        return res.status(400).json({ error: "Usuario no encontrado" });
+      }
       const nombreCliente =
         clienteExistente.name + " " + clienteExistente.lastName;
       const telefonoCliente = clienteExistente.telefono;
@@ -47,6 +63,7 @@ export const createTurno = async (req, res) => {
         emailCliente,
         dia,
         disponible: false,
+        username,
       });
 
       await HistorialTurnos.create({

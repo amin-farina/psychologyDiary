@@ -12,6 +12,19 @@ export async function getAllAppointment() {
     }
 }
 
+export async function getAppointmentByUsername(username) {
+    const res = await fetch(`http://localhost:3001/api/turnos/getusername/${username}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    const appointments = (await res.json())?.turno
+    return {
+        props: { appointments },
+    }
+}
+
 export async function deleteAppointment(id) {
     const res = await fetch(`http://localhost:3001/api/turnos/${id}`, {
         method: "DELETE",

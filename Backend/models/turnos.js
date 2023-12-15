@@ -40,6 +40,10 @@ const Turnos = db.define(
     dni: {
       type: DataTypes.INTEGER,
     },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     timestamps: false,

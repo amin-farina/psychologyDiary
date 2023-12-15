@@ -5,12 +5,14 @@ import {
   createTurno,
   deleteTurno,
   updateTurno,
+  getTurnoByUser,
 } from "../controllers/turnos.js";
 
 const turnoRoutes = Router();
 
 turnoRoutes.get("/", getAllTurnos);
-turnoRoutes.get("/:turnoId", getTurnoById);
+turnoRoutes.get("/getusername/:username", getTurnoByUser);
+turnoRoutes.get("/getid/:turnoId", getTurnoById);
 turnoRoutes.post("/create", createTurno);
 turnoRoutes.put("/update/:turnoId", updateTurno);
 turnoRoutes.delete("/:turnoId", deleteTurno);

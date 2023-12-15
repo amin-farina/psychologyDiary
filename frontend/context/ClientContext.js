@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllAppointment } from "@/app/api/service";
+import { getAllAppointment, getAppointmentByUsername } from "@/app/api/service";
 import {
   getAllTurnosDisponibles,
   getTurnoDisponibleByUsername,
@@ -81,16 +81,25 @@ export function ClientProvider({ children }) {
   useEffect(() => {
     const fetchAppointment = async () => {
       try {
-        const allAppointments = (await getAllAppointment()).props;
-        setTodosTurnos(allAppointments);
+        if (userLoggedRole === "usuario") {
+          const allAppointments = (await getAppointmentByUsername(userLogged))
+            .props;
+          setTodosTurnos(allAppointments);
+        } else {
+          if (userLoggedRole === "admin") {
+            const allAppointments = (await getAllAppointment()).props;
+            setTodosTurnos(allAppointments);
+          }
+        }
       } catch (err) {
         console.error("Error fetching appointments:", err);
       } finally {
         setLoading(false);
       }
     };
+
     fetchAppointment();
-  }, [newAppointment, loading]);
+  }, [newAppointment, loading, userLoggedRole]);
 
   useEffect(() => {
     const fetchDataUser = async () => {

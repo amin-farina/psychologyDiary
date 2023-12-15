@@ -17,9 +17,11 @@ app.use(express.json());
 env.config();
 app.use("/api", apiRoute);
 
-db.sync() //{ force: true }
+db.sync({ alter: true }) //{ force: true } { alter: true }
   .then(() => {
     User.hasMany(Cliente, { foreignKey: "username" });
+    User.hasMany(Turnos, { foreignKey: "username" });
+    Turnos.belongsTo(User, { foreignKey: "username" });
     TurnosDisponibles.belongsTo(Cliente, { foreignKey: "username" });
     Turnos.belongsTo(Cliente, { foreignKey: "dni" });
     Cliente.belongsTo(User, { foreignKey: "username" });
