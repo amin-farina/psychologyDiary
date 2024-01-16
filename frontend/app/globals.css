@@ -29,7 +29,7 @@ body {
 
 .table-style {
   border-collapse: separate;
-  border-spacing: 10px; /* Ajusta el valor según tus preferencias */
+  border-spacing: 0 10px; /* Ajusta el valor según tus preferencias */
 }
 
 .table-style th,

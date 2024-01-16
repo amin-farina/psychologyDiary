@@ -27,7 +27,6 @@ db.sync({ alter: true }) //{ force: true } { alter: true }
     Cliente.belongsTo(User, { foreignKey: "username" });
     Cliente.hasMany(Turnos, { foreignKey: "dni" });
     Cliente.hasMany(TurnosDisponibles, { foreignKey: "username" });
-
     app.listen(config.SERVER_PORT);
     console.log("Server started on port " + config.SERVER_PORT);
   })

@@ -4,17 +4,30 @@ import { useClientContext } from "@/context/ClientContext";
 import { EliminarElemento } from "../CRUD/eliminar";
 import { format } from 'date-fns';
 import { UpdateTurno } from "./updateTurno";
+import { useEffect, useState } from "react";
 
-export function ListadoDeTurnos() {
+export function ListadoDeTurnos({ fecha }) {
     const { todosTurnos } = useClientContext()
+    const [turnosDelDia, setTurnosDelDia] = useState(false)
+    const [currentDay, setCurrentDay] = useState()
 
-    const formatearFecha = (fecha) => {
-        const fechaModificada = new Date(`${fecha}T12:00:00Z`);
+    const formatearFecha = (currentDate) => {
+        const fechaModificada = new Date(`${currentDate}T12:00:00Z`);
         return (
             format(fechaModificada, "dd-MM-yyyy")
         )
     }
 
+    const fechaPasada = (currentDate, turno) => {
+        const fechaActual = new Date(currentDate);
+        const fechaTurno = new Date(turno);
+        console.log(fechaActual, fechaTurno, turno)
+        if (fechaActual < fechaTurno) {
+            return (true)
+        } else {
+            return (false)
+        }
+    }
 
     return (
         <section className="w-full justify-center flex">
@@ -31,7 +44,7 @@ export function ListadoDeTurnos() {
                 </thead>
                 <tbody>
                     {todosTurnos?.appointments?.map((turno) => (
-                        <tr key={turno.id}>
+                        <tr key={turno.id} className={`bg-green-700 m-0  ${fechaPasada(new Date(), turno.fecha) ? (turno.statusTurn === "confirmado" ? "bg-green-600" : "bg-yellow-600") : "bg-black"}`}>
                             <td>{turno.nombreCliente}</td>
                             <td>{turno.dia}</td>
                             <td>{turno.hora}</td>

@@ -2,6 +2,7 @@ import Turnos from "../models/turnos.js";
 import Cliente from "../models/clientes.js";
 import HistorialTurnos from "../models/historial.js";
 import User from "../models/user.js";
+import { Op } from "sequelize";
 
 export const getAllTurnos = async (req, res) => {
   const turno = await Turnos.findAll();
@@ -18,8 +19,42 @@ export const getTurnoByUser = async (req, res) => {
     where: {
       username: req.params.username,
     },
+    order: [
+      ["fecha", "DESC"],
+      ["hora", "ASC"],
+    ],
   });
   res.status(200).json({ turno });
+};
+
+export const getSiguientesTurnosByUser = async (req, res) => {
+  const fechaHoraActual = new Date();
+  console.log("Fecha y hora actual:", fechaHoraActual.toISOString());
+  try {
+    const turnosFuturos = await Turnos.findAll({
+      where: {
+        username: req.params.username,
+        fecha: {
+          [Op.and]: {
+            [Op.gte]: fechaHoraActual.toISOString().split("T")[0], // Fecha mayor o igual a hoy
+            [Op.or]: {
+              [Op.gt]: fechaHoraActual.toISOString().split("T")[1], // Hora mayor a ahora
+              [Op.eq]: null, // o nula si no se especifica una hora
+            },
+          },
+        },
+      },
+      order: [
+        ["fecha", "ASC"],
+        ["hora", "ASC"],
+      ],
+    });
+    console.log("Turnos futuros:", turnosFuturos);
+    res.status(200).json({ turnosFuturos });
+  } catch (error) {
+    console.error("Error al obtener los turnos:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
 };
 
 export const createTurno = async (req, res) => {
